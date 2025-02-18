@@ -1,37 +1,28 @@
 import React, { useState, useEffect } from "react";
 import Row from "./Row";
-import products from "../data/Products.json";
 import UploadExcel from "./FileUploaded";
+import products from "../data/Products.json"; 
 
 export default function Table() {
-  const [data, setData] = useState(() => {
-    const savedData = localStorage.getItem("data");
-    return savedData ? JSON.parse(savedData) : products;
-  });
 
+  const [data, setData] = useState([]);
   const [filters, setFilters] = useState({});
   const [isFilterVisible, setIsFilterVisible] = useState({});
   const [editableRows, setEditableRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const handleLoadJson = () => {
+    setData(products);
+  };
+
   const handleAddRow = () => {
-    const newRow = {
-      RMA: "",
-      OrderNumber: "",
-      ClientName: "",
-      ProductCategory: "",
-      Brand: "",
-      Model: "",
-      Colour: "",
-      ReadyStatus: "",
-      MachineStatus: "",
-      Issue: "",
-      RefundExchangeRestockUpgrade: "",
-      FurtherNotes: "",
-      ActionsButtons: "",
-    };
-    setData((prevData) => [...prevData, newRow]);
-      setEditableRows((prevEditableRows) => [...prevEditableRows, data.length]);
+    if (data.length === 0) return; 
+    const newRow = Object.keys(data[0]).reduce((acc, key) => {
+      acc[key] = "";
+      return acc;
+    }, {});
+    setData([...data, newRow]);
+    setEditableRows([...editableRows, data.length]);
   };
 
   const handleRowChange = (index, updatedRow) => {
@@ -51,13 +42,10 @@ export default function Table() {
   };
 
   const applyFilters = () => {
-    const filteredData = products.filter((row) =>
+    const filteredData = data.filter((row) =>
       Object.keys(filters).every((key) =>
         filters[key]
-          ? row[key]
-              ?.toString()
-              ?.toLowerCase()
-              ?.includes(filters[key].toLowerCase())
+          ? row[key]?.toString()?.toLowerCase()?.includes(filters[key].toLowerCase())
           : true
       )
     );
@@ -65,17 +53,16 @@ export default function Table() {
   };
 
   const getUniqueOptions = (column) => {
-    return [...new Set(products.map((row) => row[column]))].filter(
+    return [...new Set(data.map((row) => row[column]?.toString().trim()))].filter(
       (option) => option !== undefined && option !== ""
     );
   };
 
-  const handleEdit = (index) => {
-    setEditableRows((prev) => [...prev, index]);
-  };
+
+  const handleEdit = (index) => setEditableRows([...editableRows, index]);
 
   const handleDelete = (index) => {
-    const updatedData = data.filter((row, number) => number !== index);
+    const updatedData = data.filter((_, i) => i !== index);
     setData(updatedData);
     localStorage.setItem("data", JSON.stringify(updatedData));
   };
@@ -90,8 +77,9 @@ export default function Table() {
   };
 
   const resetSearch = () => {
-    setData(products);
     setSearchTerm("");
+    const savedData = JSON.parse(localStorage.getItem("data")) || [];
+    setData(savedData);
   };
 
   const handleSaveData = () => {
@@ -108,7 +96,11 @@ export default function Table() {
       <h2 style={{ fontSize: "14px" }}>Upload Excel File:</h2>
       <UploadExcel setData={setData} />
       <hr />
-      <div className="search-container" style={{ marginBottom: "15px" }}>
+      <button className="load-json-button" onClick={handleLoadJson}>
+        Load JSON Data 📂
+      </button>
+      <hr />
+      <div className="search-container">
         <input
           type="text"
           value={searchTerm}
@@ -123,43 +115,47 @@ export default function Table() {
           Reset 🔄
         </button>
       </div>
+
       <table>
-        <thead>
-          <tr>
-            {Object.keys(products[0]).map((header) => (
-              <th key={header}>
-                {header}
-                <span
-                  className="filter-icon"
-                  onClick={() => toggleFilterVisibility(header)}
-                  style={{ cursor: "pointer", marginLeft: "10px" }}
+      <thead>
+  <tr>
+    {data.length > 0 &&
+      Object.keys(data[0] || {}).map((header) => {
+        const formattedHeader = header.replace(/_/g, " "); // Convert back to readable form
+        return (
+          <th key={header}>
+            {formattedHeader}
+            <span
+              className="filter-icon"
+              onClick={() => toggleFilterVisibility(header)}
+              style={{ cursor: "pointer", marginLeft: "10px" }}
+            >
+              🔽
+            </span>
+            {isFilterVisible[header] && (
+              <div className="filter-input">
+                <select
+                  value={filters[header] || ""}
+                  onChange={(e) => handleFilterChange(header, e.target.value)}
                 >
-                  🔽
-                </span>
-                {isFilterVisible[header] && (
-                  <div className="filter-input">
-                    <select
-                      value={filters[header] || ""}
-                      onChange={(e) =>
-                        handleFilterChange(header, e.target.value)
-                      }
-                    >
-                      <option value="">All</option>
-                      {getUniqueOptions(header).map((option, index) => (
-                        <option key={index} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                    <button onClick={applyFilters} className="apply-button">
-                      Apply
-                    </button>
-                  </div>
-                )}
-              </th>
-            ))}
-          </tr>
-        </thead>
+                  <option value="">All</option>
+                  {getUniqueOptions(header).map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+                <button onClick={applyFilters} className="apply-button">
+                  Apply
+                </button>
+              </div>
+            )}
+          </th>
+        );
+      })}
+  </tr>
+</thead>
+
         <tbody>
           {data.map((row, index) => (
             <Row
@@ -169,11 +165,12 @@ export default function Table() {
               onChange={(updatedRow) => handleRowChange(index, updatedRow)}
               onEdit={() => handleEdit(index)}
               onDelete={() => handleDelete(index)}
-              onSave={() => handleSaveData(index)}
+              onSave={handleSaveData}
             />
           ))}
         </tbody>
       </table>
+
       <div className="buttons">
         <button type="button" className="add-row-button" onClick={handleAddRow}>
           Add Row ➕

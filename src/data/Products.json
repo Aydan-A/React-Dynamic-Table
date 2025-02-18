@@ -1,31 +1,31 @@
 [
   {
     "RMA": 1,
-    "Order Number": 2066,
-    "Client Name": "",
-    "Product Category": "Coffee Machine",
+    "Order_Number": "",
+    "Clients_Name": "",
+    "Product_Category": "Coffee Machine",
     "Brand": "Ascaso",
     "Model": "Dream PID",
     "Colour": "Red",
-    "Ready Status": "Ready",
-    "Machine Status": "Done - sold",
+    "Ready_Status": "Ready",
+    "Machine_Status": "Done - sold",
     "Issue": "The product was in service area without any RMA number. Machine was tested and everything works",
-    "Refund Exchange Restock Upgrade": null,
-    "Further Notes": null,
-    "ActionsButtons": ""
+    "Refund_Exchange_Restock_Upgrade": null,
+    "Further_Notes": null,
+    "Actions_Buttons": ""
   },
   {
     "RMA": 2,
-    "OrderNumber": 0,
-    "ClientsName": "Jodi Fultz",
-    "ProductCategory": "Coffee Machine",
+    "Order_Number": 2066,
+    "Clients_Name": "Jodi Fultz",
+    "Product_Category": "Coffee Machine",
     "Brand": "Keurig",
     "Model": "K2500",
     "Colour": null,
-    "ReadyStatus": "Ready",
-    "MachineStatus": "Done - sold",
+    "Ready_Status": "Ready",
+    "Machine_Status": "Done - sold",
     "Issue": "No issue, the customs returned the machine to us, since the client was not there to sign off on it. The box has been opened by the customs",
-    "RefundExchangeRestockUpgrade": "Received a new machine, not sure what to do with the open box",
-    "FurtherNotes": "Sold to a customer as an open box"
+    "Refund_Exchange_Restock_Upgrade": "Received a new machine, not sure what to do with the open box",
+    "Further_Notes": "Sold to a customer as an open box"
   }
 ]

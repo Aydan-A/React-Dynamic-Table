@@ -7,40 +7,41 @@ export default function UploadExcel({ setData }) {
     if (!file) return;
 
     const reader = new FileReader();
-
+    
     reader.onload = (e) => {
-      const binaryStr = e.target.result;
-      const workbook = XLSX.read(binaryStr, { type: "binary" });
+      const arrayBuffer = e.target.result;
+      const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: "array" });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
 
       // Convert sheet to JSON
-      const jsonData = XLSX.utils.sheet_to_json(sheet);
+      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-      // Normalize column names
-      const formattedData = jsonData.map((row) => ({
-        RMA: row["RMA"] || "",
-        OrderNumber: row["Order Number"] || "",
-        ClientName: row["Client's Name"] || "",
-        ProductCategory: row["Product Category"] || "",
-        Brand: row["Brand"] || "",
-        Model: row["Model"] || "",
-        MachineStatus: row["Machine status"] || "",
-        ReadyStatus: row["Ready/ In Progress"] || "",
-        Issue: row["Issue/Tracking number"] || "",
-        RefundExchangeRestockUpgrade:
-          row["Refund/Exchange/Restock/Upgrade"] || "",
-        FurtherNotes: row["Further Notes"] || "",
-      }));
+      if (jsonData.length < 2) return;
 
-      // Save to localStorage
-      localStorage.setItem("excelData", JSON.stringify(formattedData));
+      // Standardize headers by removing special spaces and replacing spaces with underscores
+      const headers = jsonData[0].map((header) =>
+        header
+          .trim()
+          .normalize("NFKC")  // Fix hidden characters
+          .replace(/\s+/g, "_") // Replace spaces with underscores
+          .replace(/[^\w]/g, "") // Remove all non-alphanumeric characters
+      );
 
-      // Update table data
+      // Convert rows to an array of objects
+      const formattedData = jsonData.slice(1).map((row) => {
+        let obj = {};
+        headers.forEach((header, index) => {
+          obj[header] = row[index] || "";
+        });
+        return obj;
+      });
+
+      console.log("Final Data from Excel:", formattedData); // Debugging
       setData(formattedData);
     };
 
-    reader.readAsBinaryString(file);
+    reader.readAsArrayBuffer(file);
   };
 
   return (
