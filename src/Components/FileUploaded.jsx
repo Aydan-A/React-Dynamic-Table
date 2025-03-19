@@ -7,7 +7,7 @@ export default function UploadExcel({ setData }) {
     if (!file) return;
 
     const reader = new FileReader();
-    
+
     reader.onload = (e) => {
       const arrayBuffer = e.target.result;
       const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: "array" });

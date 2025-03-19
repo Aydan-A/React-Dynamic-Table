@@ -10,7 +10,7 @@
     "Ready_Status": "Ready",
     "Machine_Status": "Done - sold",
     "Issue": "The product was in service area without any RMA number. Machine was tested and everything works",
-    "Refund_Exchange_Restock_Upgrade": null,
+    "Refund_Exchange_Restock_Upgrade": "",
     "Further_Notes": null,
     "Actions_Buttons": ""
   },
