@@ -1,0 +1,5 @@
+{
+    "json.trace.server": "off",
+    "workbench.settings.openDefaultSettings": true,
+    "workbench.settings.useSplitJSON": false
+}

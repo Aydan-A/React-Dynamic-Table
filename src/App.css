@@ -4,6 +4,7 @@ body {
   color: #000810;
   margin: 0;
   padding: 20px;
+  min-height: 100vh;
 }
 
 .table-app {
@@ -25,13 +26,16 @@ body {
   padding: 20px;
   width: 100%;
   box-sizing: border-box;
+  transition: all 0.3s ease;
 }
-
 
 .header-section h1 {
   text-align: center;
-  font-size: 24px;
-  color: #333;
+  font-size: 32px;
+  color: #1a189e;
+  margin: 0;
+  padding: 10px 0;
+  font-weight: 600;
 }
 
 .header-top {
@@ -43,18 +47,24 @@ body {
 
 .upload-section {
   width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding-bottom: 15px;
+  gap: 15px;
+  padding: 25px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .upload-section h2 {
-  font-size: 14px;
+  font-size: 18px;
   color: #333;
   margin: 0;
-  line-height: 1;
+  line-height: 1.4;
   text-align: center;
 }
 
@@ -63,12 +73,18 @@ body {
   width: 100%;
   max-width: 300px;
   margin: 0;
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 12px;
+  border: 2px dashed #1a189e;
+  border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
   text-align: center;
+  transition: all 0.3s ease;
+}
+
+.upload-section input[type="file"]:hover {
+  border-color: #2609ff;
+  background: rgba(26, 24, 158, 0.05);
 }
 
 .action-buttons-container {
@@ -373,4 +389,20 @@ td.action-buttons-cell {
   td {
     padding: 6px;
   }
+}
+
+.highlight {
+  background-color: #ffeb3b;
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: bold;
+  color: #000;
+}
+
+.no-results {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+  background-color: #f8f9fa;
 }
