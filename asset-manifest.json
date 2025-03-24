@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/React-Dynamic-Table/static/css/main.d6db5a70.css",
+    "main.js": "/React-Dynamic-Table/static/js/main.0d686f40.js",
+    "index.html": "/React-Dynamic-Table/index.html",
+    "main.d6db5a70.css.map": "/React-Dynamic-Table/static/css/main.d6db5a70.css.map",
+    "main.0d686f40.js.map": "/React-Dynamic-Table/static/js/main.0d686f40.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d6db5a70.css",
+    "static/js/main.0d686f40.js"
+  ]
+}
