@@ -406,3 +406,19 @@ td.action-buttons-cell {
   font-style: italic;
   background-color: #f8f9fa;
 }
+
+.export-button {
+  background-color: #1a73e8;
+  color: white;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.export-button:hover {
+  background-color: #0c5bcc;
+  transform: scale(1.05);
+}

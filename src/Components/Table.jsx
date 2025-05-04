@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Row from "./Row";
 import UploadExcel from "./FileUploaded";
+import * as XLSX from "xlsx";
+
+
 
 export default function Table() {
   const [data, setData] = useState([]);
@@ -191,6 +194,14 @@ export default function Table() {
     }
   };
 
+  const handleExport = () => {
+    const ws = XLSX.utils.json_to_sheet(filteredData.length > 0 ? filteredData : data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "TableData");
+    XLSX.writeFile(wb, "MachineReturnTable.xlsx");
+  };
+
+
   return (
     <div>
       <div className="header-section">
@@ -210,6 +221,10 @@ export default function Table() {
                 <button type="button" className="undo-button" onClick={handleUndo}>
                   Undo 🔄
                 </button>
+                <button type="button" className="export-button" onClick={handleExport}>
+                  Export to Excel 📤
+                </button>
+
               </div>
 
               <div className="search-container">
@@ -247,7 +262,7 @@ export default function Table() {
                     {Object.keys(data[0] || {}).map((header) => (
                       <th key={header}>
                         {header.replace(/_/g, " ")}
-                        {["Product_Category", "Brand", "Model", "Colour"].includes(header) && (
+                        {["Product_Category", "Brand", "Model", "Colour", "Ready_Status", "Machine_Status"].includes(header) && (
                           <>
                             <span
                               className="filter-icon"
